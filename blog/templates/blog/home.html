@@ -1,0 +1,438 @@
+{% extends 'blog/base.html' %}
+{% load static %}
+{% block header %}
+  <!-- ======= Header ======= -->
+  <header id="header" class="header d-flex align-items-center fixed-top">
+    <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+
+      <a href="{% url 'blog-home' %}" class="logo d-flex align-items-center">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <img src=" {% static 'assets/img/logo.png' %} " alt="">
+      </a>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+          <li><a href="{% url 'blog-home' %}">Blog</a></li>
+          <li><a href=" {% url 'video' %} ">Video</a></li>
+          <li class="dropdown"><a href=""><span>Departments</span> <i class="bi bi-chevron-down dropdown-indicator"></i></a>
+            <ul>
+              <li><a href="search-result.html">Search Result</a></li>
+              {% for department in departments %}
+                  <li><a href="search-result.html">{{department.name}}</a></li>
+                </li>
+              {% endfor %}              
+            </ul>
+          </li>
+
+          <li><a href="{% url 'blog-about' %}">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </nav><!-- .navbar -->
+
+      <div class="position-relative">
+        {% if user.is_authenticated %}
+          <a class="navlink" href=" {% url 'logout' %}">Logout</a>
+          <a href="{% url 'profile' %}">Profile</a>
+        {% else %}
+          <a class="navlink" href=" {% url 'login' %}">Login</a>
+          <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+        <a href="#" class="mx-2 js-search-open"><span class="bi-search"></span></a>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+
+        <!-- ======= Search Form ======= -->
+        <div class="search-form-wrap js-search-form-wrap">
+          <form action="search-result.html" class="search-form">
+            <span class="icon bi-search"></span>
+            <input type="text" placeholder="Search" class="form-control">
+            <button class="btn js-search-close"><span class="bi-x"></span></button>
+          </form>
+        </div><!-- End Search Form -->
+
+      </div>
+
+    </div>
+
+  </header><!-- End Header -->
+{% endblock header %}
+
+{% block content %}
+<main id="main">
+  <section id="hero-slider" class="hero-slider">
+    <div class="container-md" data-aos="fade-in">
+      <div class="row">
+        <div class="col-12">
+          <div class="swiper sliderFeaturedPosts">
+            <div class="swiper-wrapper">
+              {% for post in header_posts %}
+              <div class="swiper-slide">
+                <a href="single-post.html" class="img-bg d-flex align-items-end" style="background-image: url('{{ post.header_image }}');">
+                  <div class="img-bg-inner">
+                    <h2>{{post.title}}</h2>
+                    <p>{{post.content|safe|truncatewords:30}}</p>
+                  </div>
+                </a>
+              </div>
+              {% endfor %}
+              
+            </div>
+            <div class="custom-swiper-button-next">
+              <span class="bi-chevron-right"></span>
+            </div>
+            <div class="custom-swiper-button-prev">
+              <span class="bi-chevron-left"></span>
+            </div>
+
+            <div class="swiper-pagination"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section><!-- End Hero Slider Section -->
+
+
+
+
+    <!-- ======= Post Grid Section ======= -->
+    <section id="posts" class="posts">
+      <div class="container" data-aos="fade-up">
+        <div class="row g-5">
+          <div class="col-lg-4">
+            {% for first_post in first_posts %}
+            <div class="post-entry-1 lg">
+              <a href="single-post.html"><img src="{{ first_post.header_image}}" alt="" class="img-fluid"></a>
+              <div class="post-meta"><span class="date">{{ first_post.department }}</span> <span class="mx-1">&bullet;</span> <span> {{ first_post.date_posted }}</span></div>
+              <h2><a href="single-post.html">{{ first_post.title }}</a></h2>
+              <p class="mb-4 d-block">{{ first_post.content|safe|truncatewords:30 }}</p>
+
+              <div class="d-flex align-items-center author">
+                <div class="photo"><img src="{{ first_post.header_image }}" alt="" class="img-fluid"></div>
+                <div class="name">
+                  <h3 class="m-0 p-0">{{ first_post.site}}</h3>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          
+          <div class="col-lg-8">
+            <div class="row g-5">
+              <div class="col-lg-4 border-start custom-border">
+              {% for latest_post in latest_posts %}
+                <div class="post-entry-1">
+                  <a href="single-post.html"><img src="{{ latest_post.header_image }}" alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date"> {{ latest_post.department }}</span> <span class="mx-1">&bullet;</span> <span>{{ latest_post.date_posted }}</span></div>
+                  <h2><a href="single-post.html">{{latest_post.title}}</a></h2>
+                </div>
+                {% endfor %}
+              </div>
+              <div class="col-lg-4 border-start custom-border">
+                {% for latest_post_2 in latest_posts_2 %}
+                <div class="post-entry-1">
+                  <a href="single-post.html"><img src="{{ latest_post_2.header_image }}" alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date"> {{ latest_post_2.department }}</span> <span class="mx-1">&bullet;</span> <span>{{ latest_post_2.date_posted }}</span></div>
+                  <h2><a href="single-post.html">{{latest_post_2.title}}</a></h2>
+                </div>
+                {% endfor %}
+              </div>
+              <!-- Trending Section -->
+              <div class="col-lg-4">
+
+                <div class="trending">
+                  <h3>Trending</h3>
+                  <ul class="trending-post">
+                    <li>
+                      <a href="single-post.html">
+                        <span class="number">1</span>
+                        <h3>The Best Homemade Masks for Face (keep the Pimples Away)</h3>
+                        <span class="author">Jane Cooper</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="single-post.html">
+                        <span class="number">2</span>
+                        <h3>17 Pictures of Medium Length Hair in Layers That Will Inspire Your New Haircut</h3>
+                        <span class="author">Wade Warren</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="single-post.html">
+                        <span class="number">3</span>
+                        <h3>13 Amazing Poems from Shel Silverstein with Valuable Life Lessons</h3>
+                        <span class="author">Esther Howard</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="single-post.html">
+                        <span class="number">4</span>
+                        <h3>9 Half-up/half-down Hairstyles for Long and Medium Hair</h3>
+                        <span class="author">Cameron Williamson</span>
+                      </a>
+                    </li>
+                    <li>
+                      <a href="single-post.html">
+                        <span class="number">5</span>
+                        <h3>Life Insurance And Pregnancy: A Working Mom’s Guide</h3>
+                        <span class="author">Jenny Wilson</span>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+
+              </div> <!-- End Trending Section -->
+            </div>
+          </div>
+
+        </div> <!-- End .row -->
+      </div>
+    </section> <!-- End Post Grid Section -->
+    <!-- ======= First Faculty Section ======= -->
+    {% if faculty_1 %}
+    <section class="category-section">
+      <div class="container" data-aos="fade-up">
+
+        <div class="section-header d-flex justify-content-between align-items-center mb-5">
+          <h2>{{faculty_1.name}}</h2>
+          <div><a href="category.html" class="more">See All {{ faculty_1.name }}</a></div>
+        </div>
+        <div class="row">
+          <div class="col-md-9">
+            {% if faculty_1_departmental_posts %}
+            <div class="d-lg-flex post-entry-2">
+              <a href="single-post.html" class="me-4 thumbnail mb-4 mb-lg-0 d-inline-block">
+                <img src=" {{ faculty_1_departmental_posts.header_image }} " alt="" class="img-fluid">
+              </a>
+              <div>
+                <div class="post-meta"><span class="date">{{ faculty_1_departmental_posts.department }}</span> <span class="mx-1">&bullet;</span> <span>{{ faculty_1_departmental_posts.date_posted }}</span></div>
+                <h3><a href="single-post.html">{{ faculty_1_departmental_posts.title }}</a></h3>
+                <p>{{ faculty_1_departmental_posts.content|safe|truncatewords:30 }}</p>
+                <div class="d-flex align-items-center author">
+                  <div class="photo"><img src="{{ faculty_1_departmental_posts.header_image }}" alt="" class="img-fluid"></div>
+                  <div class="name">
+                    <h3 class="m-0 p-0">{{ faculty_1_departmental_posts.site }}</h3>
+                  </div>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+            {% if Mathematics_and_Computational_Sciences %}
+            <div class="row">
+              <div class="col-lg-4">
+                {% for tech_posts in Mathematics_and_Computational_Sciences %}
+                  <div class="post-entry-1">
+                    <a href="single-post.html"><img src="{{tech_posts.header_image}}" alt="" class="img-fluid"></a>
+                    <div class="post-meta"><span class="date">{{tech_posts.department}}</span> <span class="mx-1">&bullet;</span> <span>{{tech_posts.date_posted}}</span></div>
+                    <h2 class="mb-2"><a href="single-post.html">{{tech_posts.title}}</a></h2>
+                    <span class="author mb-3 d-block">{{tech_posts.site}}</span>
+                    <p class="mb-4 d-block">{{tech_posts.content|safe|truncatewords:10}}</p>
+                  </div>
+                {% endfor %}
+                
+              </div>
+              
+            {% endif %}
+              {% if Physical_Sciences %}
+              <div class="col-lg-8">
+                {% for post in Physical_Sciences %}
+                <div class="post-entry-1">
+                  <a href="single-post.html"><img src="{{post.header_image}}" alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                  <h2 class="mb-2"><a href="single-post.html">{{post.title}}</a></h2>
+                  <span class="author mb-3 d-block">{{post.site}}</span>
+                  <p class="mb-4 d-block">{{post.content|safe|truncatewords:30}}</p>
+                </div>
+                {% endfor %}
+              </div>
+              {% endif %}
+            </div>
+
+            
+
+          </div>
+          {% if faculty_1_posts %}
+          <div class="col-md-3">
+            {% for post in faculty_1_posts %}
+            <div class="post-entry-1 border-bottom">
+              <div class="post-meta"><span class="date">{{ post.department }}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+              <h2 class="mb-2"><a href="single-post.html">{{post.title}}</a></h2>
+              <span class="author mb-3 d-block">{{post.site}}</span>
+            </div>
+            {% endfor %}
+            
+          </div>
+          {% endif %}
+        </div>
+
+      </div>
+    </section><!-- End Faculty 1 Category Section -->
+    {% endif %}
+    {% if faculty_2 %}
+        <!-- ======= Faculty 2 Category Section ======= -->
+        <section class="category-section">
+          <div class="container" data-aos="fade-up">
+    
+            <div class="section-header d-flex justify-content-between align-items-center mb-5">
+              <h2>{{faculty_2.name}}</h2>
+              <div><a href="category.html" class="more">See All {{faculty_2.name}}</a></div>
+            </div>
+    
+            <div class="row">
+              <div class="col-md-9 order-md-2">
+                {% if faculty_2_departmental_posts %}
+                <div class="d-lg-flex post-entry-2">
+                  <a href="single-post.html" class="me-4 thumbnail d-inline-block mb-4 mb-lg-0">
+                    <img src="{{ faculty_2_departmental_posts.header_image }} " alt="" class="img-fluid">
+                  </a>
+                  <div>
+                    <div class="post-meta"><span class="date">{{ faculty_2_departmental_posts.department }}</span> <span class="mx-1">&bullet;</span> <span>{{ faculty_2_departmental_posts.date_posted }}</span></div>
+                    <h3><a href="single-post.html">{{ faculty_2_departmental_posts.title }}</a></h3>
+                    <p>{{ faculty_2_departmental_posts.content|safe|truncatewords:40 }}</p>
+                    <div class="d-flex align-items-center author">
+                      <div class="photo"><img src="{{ faculty_2_departmental_posts.header_image }}" alt="" class="img-fluid"></div>
+                      <div class="name">
+                        <h3 class="m-0 p-0">{{ faculty_2_departmental_posts.site }}</h3>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                  
+                {% if faculty_2_posts_2 %}
+                  <div class="col-lg-4">
+                    {% for post in faculty_2_posts %}
+                    <div class="post-entry-1 border-bottom">
+                      <a href="single-post.html"><img src="{{post.header_image}}" alt="" class="img-fluid"></a>
+                      <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                      <h2 class="mb-2"><a href="single-post.html">{{post.title}}</a></h2>
+                      <span class="author mb-3 d-block">{{post.site}}</span>
+                      <p class="mb-4 d-block">{{post.content|safe|truncatewords:10}}</p>
+                    </div>
+                    {% endfor %}
+                  </div>
+                  {% endif %}
+                {% if faculty_2_posts_3 %}
+                  <div class="col-lg-8">
+                    {% for post in faculty_2_posts_3 %}
+                    <div class="post-entry-1">
+                      <a href="single-post.html"><img src=" {{post.header_image}}" alt="" class="img-fluid"></a>
+                      <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                      <h2 class="mb-2"><a href="single-post.html">{{post.title}}</a></h2>
+                      <span class="author mb-3 d-block">{{post.site}}</span>
+                      <p class="mb-4 d-block">{{post.content|safe|truncatewords:15}}</p>
+                    </div>
+                    {% endfor %}
+                  </div>
+                </div>
+                {% endif %}
+              </div>
+              
+              {% if faculty_2_posts %}
+              <div class="col-md-3">
+                {% for post in faculty_2_posts %}
+                  <div class="post-entry-1 border-bottom">
+                    <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                    <h2 class="mb-2"><a href="single-post.html">{{post.title}}</a></h2>
+                    <span class="author mb-3 d-block">{{post.site}}</span>
+                  </div>
+                
+                {% endfor %}
+
+              </div>
+              
+              {% endif %}
+            </div>
+          </div>
+        </section><!-- End Faculty 2 Section -->
+    {% endif %}
+
+    {% if faculty_3 and faculty_3_posts %}
+        <!-- ======= Faculty 3 Section ======= -->
+        <section class="category-section">
+          <div class="container" data-aos="fade-up">
+    
+            <div class="section-header d-flex justify-content-between align-items-center mb-5">
+              <h2>{{ faculty_3.name}}</h2>
+              <div><a href="category.html" class="more">See All {{ faculty_3.name}}</a></div>
+            </div>
+    
+            <div class="row g-5">
+              {% if faculty_3_departmental_posts %}
+              <div class="col-lg-4">
+                <div class="post-entry-1 lg">
+                  <a href="single-post.html"><img src="{{faculty_3_departmental_posts.header_image}}" alt="" class="img-fluid"></a>
+                  <div class="post-meta"><span class="date">{{faculty_3_departmental_posts.department}}</span> <span class="mx-1">&bullet;</span> <span>{{faculty_3_departmental_posts.date_posted}}</span></div>
+                  <h2><a href="single-post.html">{{faculty_3_departmental_posts.title}}</a></h2>
+                  <p class="mb-4 d-block">{{faculty_3_departmental_posts.content|safe|truncatewords:40 }}</p>
+    
+                  <div class="d-flex align-items-center author">
+                    <div class="photo"><img src="{{faculty_3_departmental_posts.header_image}}" alt="" class="img-fluid"></div>
+                    <div class="name">
+                      <h3 class="m-0 p-0">{{faculty_3_departmental_posts.site}}</h3>
+                    </div>
+                  </div>
+                </div>
+                {% endif %}
+
+                {% if Property_planning_survey %}
+                {% for post in Property_planning_survey %}
+                    <div class="post-entry-1 border-bottom">
+                      <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                      <h2 class="mb-2"><a href="single-post.html">{{post.title}}</a></h2>
+                      <span class="author mb-3 d-block">{{post.site}}</span>
+                    </div>
+                {% endfor %}
+                {% endif %}
+              </div>
+    
+              <div class="col-lg-8">
+                <div class="row g-5">
+                  
+                  <div class="col-lg-4 border-start custom-border">
+                    {% for post in faculty_3_posts %}
+                      <div class="post-entry-1">
+                        <a href="single-post.html"><img src="{{post.header_image}}" alt="" class="img-fluid"></a>
+                        <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                        <h2><a href="single-post.html">{{post.title}}</a></h2>
+                      </div>
+                    {% endfor %}
+                    
+                  </div>
+                  {% if faculty_3_posts_2 %}
+                  <div class="col-lg-4 border-start custom-border">
+                    {% for post in faculty_3_posts_2 %}
+                      <div class="post-entry-1">
+                        <a href="single-post.html"><img src="{{post.header_image}}" alt="" class="img-fluid"></a>
+                        <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                        <h2><a href="single-post.html">{{post.title}}</a></h2>
+                      </div>
+                    {% endfor %}
+                    
+                  </div>
+                  {% endif %}
+                  
+                  {% if faculty_3_posts_3 %}
+                  <div class="col-lg-4">
+                  {% for post in faculty_3_posts_3 %}
+                    <div class="post-entry-1 border-bottom">
+                      <div class="post-meta"><span class="date">{{post.department}}</span> <span class="mx-1">&bullet;</span> <span>{{post.date_posted}}</span></div>
+                      <h2 class="mb-2"><a href="single-post.html">{{post.title}}</a></h2>
+                      <span class="author mb-3 d-block">{{post.site}}</span>
+                    </div>
+                  {% endfor %}
+                </div>
+                  
+                  {% endif %}
+                </div>
+              </div>
+    
+            </div> <!-- End .row -->
+          </div>
+        </section><!-- End Lifestyle Category Section -->
+    {% endif %}
+
+  </main><!-- End #main -->
+
+    
+{% endblock  %}
